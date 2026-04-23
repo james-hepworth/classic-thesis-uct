@@ -1,4 +1,4 @@
-#import "@preview/uct-classic-thesis:0.1.0": *
+#import "@preview/classic-thesis-uct:0.1.0": *
 
 #let content = [
 == Research Aim

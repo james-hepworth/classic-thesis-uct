@@ -1,4 +1,4 @@
-#import "@preview/uct-classic-thesis:0.1.0": *
+#import "@preview/classic-thesis-uct:0.1.0": *
 
 #let content = [
 This document is a reusable proposal template built from a complete thesis-style Typst project. It preserves examples of common proposal elements so that the file remains useful when drafting a new submission. Replace the prose, figures, tables, and references with project-specific material as needed.#footnote[This is an example footnote. Use footnotes sparingly for clarifications that would otherwise interrupt the main argument.]

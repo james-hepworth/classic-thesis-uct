@@ -1,5 +1,5 @@
 [package]
-name = "uct-classic-thesis"
+name = "classic-thesis-uct"
 version = "0.1.0"
 entrypoint = "lib.typ"
 authors = ["James Hepworth <https://github.com/james-hepworth>"]

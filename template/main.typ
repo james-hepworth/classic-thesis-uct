@@ -1,4 +1,4 @@
-#import "@preview/uct-classic-thesis:0.1.0": *
+#import "@preview/classic-thesis-uct:0.1.0": *
 #import "chapters/chapter01.typ": content as chapter01
 #import "chapters/chapter02.typ": content as chapter02
 #import "chapters/chapter03.typ": content as chapter03

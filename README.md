@@ -7,7 +7,7 @@ A two-sided A4 document with mirrored margins, EB Garamond typography in spaced 
 The fastest way is to scaffold a new project with the Typst CLI:
 
 ```sh
-typst init @preview/uct-classic-thesis:0.1.0 my-thesis
+typst init @preview/classic-thesis-uct:0.1.0 my-thesis
 cd my-thesis
 typst watch main.typ thesis.pdf
 ```
@@ -21,7 +21,7 @@ The generated project gives you a runnable `main.typ`, seven chapter stubs, an e
 If you would rather drive the layout yourself, import the module from your own document:
 
 ```typst
-#import "@preview/uct-classic-thesis:0.1.0": *
+#import "@preview/classic-thesis-uct:0.1.0": *
 
 #let meta = (
   title: "On the Categorical Imperatives of Penguins",
@@ -149,16 +149,16 @@ To test changes to this package against the bundled template before publishing a
 
 ```sh
 # macOS
-ln -snf "$(pwd)" "$HOME/Library/Application Support/typst/packages/preview/uct-classic-thesis/0.1.0"
+ln -snf "$(pwd)" "$HOME/Library/Application Support/typst/packages/preview/classic-thesis-uct/0.1.0"
 
 # Linux (XDG)
-ln -snf "$(pwd)" "${XDG_DATA_HOME:-$HOME/.local/share}/typst/packages/preview/uct-classic-thesis/0.1.0"
+ln -snf "$(pwd)" "${XDG_DATA_HOME:-$HOME/.local/share}/typst/packages/preview/classic-thesis-uct/0.1.0"
 ```
 
-After symlinking, `typst compile template/main.typ` resolves the `@preview/uct-classic-thesis:0.1.0` import against this checkout. To test the full init flow:
+After symlinking, `typst compile template/main.typ` resolves the `@preview/classic-thesis-uct:0.1.0` import against this checkout. To test the full init flow:
 
 ```sh
-typst init @preview/uct-classic-thesis:0.1.0 /tmp/thesis-test
+typst init @preview/classic-thesis-uct:0.1.0 /tmp/thesis-test
 typst compile /tmp/thesis-test/main.typ
 ```
 
@@ -177,6 +177,6 @@ The package is distributed under a split SPDX expression — `GPL-2.0-or-later A
 | `lib.typ`, `classicthesis.typ`, `assets/`, `thumbnail.png`, `README.md` | GNU General Public License v2 or later | `LICENSE` |
 | Everything under `template/` (the project skeleton copied by `typst init`) | MIT No Attribution (MIT-0) | `template/LICENSE` |
 
-**In plain English:** if you modify or redistribute the layout module (the code that defines the classic-thesis visual style), GPL v2 applies and you must share your changes under the same licence. If you run `typst init @preview/uct-classic-thesis:0.1.0` to start a thesis and then write your own document on top of the scaffold, the resulting work is yours — MIT-0 imposes no attribution or licence-distribution requirement.
+**In plain English:** if you modify or redistribute the layout module (the code that defines the classic-thesis visual style), GPL v2 applies and you must share your changes under the same licence. If you run `typst init @preview/classic-thesis-uct:0.1.0` to start a thesis and then write your own document on top of the scaffold, the resulting work is yours — MIT-0 imposes no attribution or licence-distribution requirement.
 
 If you ship this package bundled inside a larger distribution, you must include both licence files.
