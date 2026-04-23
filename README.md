@@ -2,10 +2,6 @@ PhD thesis or research proposal at the University of Cape Town, in the Classic T
 
 A two-sided A4 document with mirrored margins, EB Garamond typography in spaced small caps, side-caption figures and tables, margin-set equation numbers, and a centred-column front matter (title page through acronyms) that gives way to the asymmetric major-column layout in the main matter.
 
-This project is inspired by the [Classic Thesis](https://bitbucket.org/amiede/workspace/projects/CT) project by André Miede and adapted for use at the University of Cape Town.
-
-The project is in no way affiliated with the University of Cape Town or André Miede.
-
 ## Quick start
 
 The fastest way is to scaffold a new project with the Typst CLI:
@@ -172,6 +168,15 @@ Regenerate the thumbnail after layout-affecting changes:
 typst compile -f png --pages 1 --ppi 250 template/main.typ thumbnail.png
 ```
 
-## Licence
+## Licensing
 
-GNU General Public License v2 or later. See `LICENSE`.
+The package is distributed under a split SPDX expression — `GPL-2.0-or-later AND MIT-0` — so that documents scaffolded from the template are not encumbered by the copyleft terms that apply to the layout code itself.
+
+| Path | Licence | File |
+| --- | --- | --- |
+| `lib.typ`, `classicthesis.typ`, `assets/`, `thumbnail.png`, `README.md` | GNU General Public License v2 or later | `LICENSE` |
+| Everything under `template/` (the project skeleton copied by `typst init`) | MIT No Attribution (MIT-0) | `template/LICENSE` |
+
+**In plain English:** if you modify or redistribute the layout module (the code that defines the classic-thesis visual style), GPL v2 applies and you must share your changes under the same licence. If you run `typst init @preview/uct-classic-thesis:0.1.0` to start a thesis and then write your own document on top of the scaffold, the resulting work is yours — MIT-0 imposes no attribution or licence-distribution requirement.
+
+If you ship this package bundled inside a larger distribution, you must include both licence files.
