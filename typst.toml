@@ -2,10 +2,10 @@
 name = "uct-classic-thesis"
 version = "0.1.0"
 entrypoint = "lib.typ"
-authors = ["James <https://github.com/jameschapman19>"]
+authors = ["James <https://github.com/james-hepworth>"]
 license = "GPL-2.0-or-later"
 description = "PhD thesis at the University of Cape Town in the Classic Thesis tradition."
-repository = "https://github.com/jameschapman19/classic-thesis-uct"
+repository = "https://github.com/james-hepworth/classic-thesis-uct"
 keywords = [
   "thesis",
   "dissertation",
