@@ -9,7 +9,7 @@
 // Dark grey-blue used for marginalia labels (equation numbers and the
 // "Figure N" / "Table N" tags on side captions). Muted enough to sit
 // comfortably next to the body text in EB Garamond.
-#let label-color = rgb("#324661")
+#let label-color = rgb("#3a5f90")
 #let rule-stroke = 0.6pt + black
 #let major-column = 130mm
 #let caption-gutter = 6mm
@@ -25,12 +25,12 @@
 // width as `major-column`, but page-centred rather than offset. A4 is 210mm
 // wide, so the side margins are (210mm − major-column) / 2 on each side.
 #let front-matter-side-margin = (210mm - major-column) / 2
-#let figure_index_label = <figure-index-entry>
-#let table_index_label = <table-index-entry>
+#let figure-index-label = <figure-index-entry>
+#let table-index-label = <table-index-entry>
 
-#let spaced_smallcaps(body, size: 10pt) = text(font: smallcaps-font, size: size, tracking: 0.02em)[#body]
-#let spaced_caps(body, size: 10pt) = text(font: heading-font, size: size, tracking: 0.01em)[#body]
-#let page_is_odd() = calc.rem(counter(page).get().first(), 2) == 1
+#let spaced-smallcaps(body, size: 10pt) = text(font: smallcaps-font, size: size, tracking: 0.02em)[#body]
+#let spaced-caps(body, size: 10pt) = text(font: heading-font, size: size, tracking: 0.01em)[#body]
+#let page-is-odd() = calc.rem(counter(page).get().first(), 2) == 1
 
 // Page number centred on the physical page (not on the major column). For the
 // asymmetric main-matter layout the content area is offset from the page
@@ -39,7 +39,7 @@
 // where the shift should be zero — pass `shift: 0mm` in that case. `move`
 // doesn't participate in layout, so `footer-descent` still controls the
 // vertical position and the number stays inside the printable area.
-#let folio_footer(format, shift: (outer-margin - inner-margin) / 2) = context {
+#let folio-footer(format, shift: (outer-margin - inner-margin) / 2) = context {
   let p = counter(page).get().first()
   let odd = calc.rem(p, 2) == 1
   let dx = if odd { shift } else { -shift }
@@ -63,20 +63,20 @@
 // it feels like a miniature version of those elements rather than a detached
 // label. The title sits at the outer edge of the major column (right on odd
 // pages, left on even pages), and the rule spans the full column width below.
-#let classic_header() = context {
+#let classic-header() = context {
   let cur = here().page()
   // Suppress the running header on chapter-opening pages — the chapter title
   // and its rule already dominate the top of the page, so a second title
   // above them just looks redundant.
-  let opens_chapter = query(heading.where(level: 1))
+  let opens-chapter = query(heading.where(level: 1))
     .any(h => h.location().page() == cur)
-  if opens_chapter { return [] }
+  if opens-chapter { return [] }
   let title = running-head-title()
   if title == none { return [] }
   let odd = calc.rem(cur, 2) == 1
   let anchor = if odd { right } else { left }
   align(anchor)[
-    #spaced_smallcaps(title, size: 8.5pt)
+    #spaced-smallcaps(title, size: 8.5pt)
     #v(1.8mm, weak: true)
   ]
 }
@@ -86,15 +86,15 @@
 // pages, so this block just fills the content area on every page without any
 // manual alignment (which would otherwise be fixed at block-creation time and
 // leak the wrong position onto overflow pages).
-#let major_column_block(body) = block(width: 100%)[#body]
+#let major-column-block(body) = block(width: 100%)[#body]
 
 // Marginalia (equation labels, figure/table captions) sit in the outer margin.
 // On odd pages that margin is to the right of the major column, so we align
 // the caption to the inner edge (left). On even pages the margin is to the
 // left of the major column, so we right-align the caption to keep its inner
 // edge adjacent to the column it annotates.
-#let minor_top(body) = context [
-  #if page_is_odd() {
+#let minor-top(body) = context [
+  #if page-is-odd() {
     [#place(top + left, dx: 100% + caption-gutter)[
       #box(width: caption-width)[#align(left)[#body]]
     ]]
@@ -105,8 +105,8 @@
   }
 ]
 
-#let minor_bottom(body) = context [
-  #if page_is_odd() {
+#let minor-bottom(body) = context [
+  #if page-is-odd() {
     [#place(bottom + left, dx: 100% + caption-gutter)[
       #box(width: caption-width)[#align(left)[#body]]
     ]]
@@ -119,8 +119,8 @@
 
 // Vertically centred variant — used for equation labels so the number sits at
 // the visual middle of the equation rather than at its top.
-#let minor_middle(body) = context [
-  #if page_is_odd() {
+#let minor-middle(body) = context [
+  #if page-is-odd() {
     [#place(horizon + left, dx: 100% + caption-gutter)[
       #box(width: caption-width)[#align(left)[#body]]
     ]]
@@ -160,7 +160,7 @@
       bottom: page-bottom-margin,
     ),
     numbering: none,
-    header: classic_header(),
+    header: classic-header(),
     header-ascent: 14mm,
     footer-descent: 14mm,
   )
@@ -168,9 +168,9 @@
   body
 }
 
-#let outside_margin_slot(body) = context {
+#let outside-margin-slot(body) = context {
   set text(size: 9pt)
-  if page_is_odd() {
+  if page-is-odd() {
     align(right)[#body]
   } else {
     align(left)[#body]
@@ -187,8 +187,8 @@
   // visible title down the page.
   #place(top + left, hide(heading(level: 1, outlined: false, numbering: none)[#title]))
   #v(20mm)
-  #major_column_block[
-    #spaced_caps(title, size: 15pt)
+  #major-column-block[
+    #spaced-caps(title, size: 15pt)
     #v(4mm)
     #line(length: 100%, stroke: rule-stroke)
   ]
@@ -201,9 +201,9 @@
     #v(16mm)
     #image("assets/uct.jpg", width: 43mm)
     #v(20mm)
-    #spaced_caps(meta.title, size: 21pt)
+    #spaced-caps(meta.title, size: 21pt)
     #v(8mm)
-    #spaced_smallcaps(meta.name, size: 10.5pt)
+    #spaced-smallcaps(meta.name, size: 10.5pt)
     #v(30mm)
     #align(center)[
       #text(size: 13pt)[
@@ -216,7 +216,7 @@
     #v(24mm)
     #text(size: 12pt)[#meta.date]
     #v(1fr)
-    #par(justify: false)[#emph[Supervised by:] #meta.supervisor & #meta.co_supervisor]
+    #par(justify: false)[#emph[Supervised by:] #meta.supervisor & #meta.co-supervisor]
     #v(4mm)
     #par(justify: false)[#emph[Funding:] #meta.funder]
   ]
@@ -225,16 +225,17 @@
 
 #let title-back(meta) = [
   #set page(header: none, footer: none, numbering: none)
+  #set par(first-line-indent: 0pt)
   #v(188mm)
   #text(size: 11.5pt)[#meta.name: #emph[#meta.title,] #meta.date]
   #v(9mm)
-  #spaced_smallcaps("Supervisors", size: 9.5pt)
+  #spaced-smallcaps("Supervisors", size: 9.5pt)
   #linebreak()
   #meta.supervisor
   #linebreak()
-  #meta.co_supervisor
+  #meta.co-supervisor
   #v(8mm)
-  #spaced_smallcaps("Institution", size: 9.5pt)
+  #spaced-smallcaps("Institution", size: 9.5pt)
   #linebreak()
   #meta.department
   #linebreak()
@@ -245,23 +246,23 @@
 ]
 
 #let start-frontmatter() = {
-  set page(footer: folio_footer("i"))
+  set page(footer: folio-footer("i"))
 }
 
 #let start-mainmatter() = {
   counter(page).update(1)
-  set page(footer: folio_footer("1"))
+  set page(footer: folio-footer("1"))
 }
 
 #let abstract-page(body) = [
   #front-heading("Abstract")
-  #major_column_block[#body]
+  #major-column-block[#body]
 ]
 
 #let contents-page() = [
   #pagebreak(to: "odd")
   #front-heading("Contents")
-  #major_column_block[
+  #major-column-block[
     #context {
       let entries = query(selector(heading)).filter(it => it.outlined and it.level <= 3)
       
@@ -291,12 +292,12 @@
   ]
 ]
 
-#let list_page(title, entry_label, kind_name) = [
+#let list-page(title, entry-label, kind-name) = [
   #pagebreak()
   #front-heading(title)
-  #major_column_block[
+  #major-column-block[
     #context {
-      let entries = query(entry_label)
+      let entries = query(entry-label)
 
       if entries.len() == 0 [
         No entries.
@@ -308,7 +309,7 @@
           ..entries.map(entry => {
             let data = entry.value
             (
-              [#text(weight: "bold")[#kind_name #data.number] #h(0.6em) #data.caption #v(0.6em)],
+              [#text(weight: "bold", fill: label-color)[#kind-name #data.number] #h(0.6em) #data.caption #v(0.6em)],
               [#counter(page).at(entry.location()).first()],
             )
           }).flatten(),
@@ -318,14 +319,14 @@
   ]
 ]
 
-#let list-of-figures-page() = list_page("List of Figures", figure_index_label, "Figure")
+#let list-of-figures-page() = list-page("List of Figures", figure-index-label, "Figure")
 
-#let list-of-tables-page() = list_page("List of Tables", table_index_label, "Table")
+#let list-of-tables-page() = list-page("List of Tables", table-index-label, "Table")
 
 #let acronym-page(items) = [
   #pagebreak()
   #front-heading("Acronyms")
-  #major_column_block[
+  #major-column-block[
     #table(
       columns: (auto, 1fr),
       inset: (x: 0pt, y: 5pt),
@@ -348,7 +349,7 @@
 #let bibliography-page(body) = [
   #pagebreak(to: "odd")
   #front-heading("References")
-  #major_column_block[#body]
+  #major-column-block[#body]
 ]
 
 #let chapter(title, number, body) = [
@@ -362,7 +363,7 @@
     )[#number]
     // The chapter number is placed in the outer margin. It sits adjacent to
     // the title column, pulled up so its top roughly aligns with the title.
-    if page_is_odd() {
+    if page-is-odd() {
       place(top + left, dx: 100% + caption-gutter, dy: -6mm, number-text)
     } else {
       place(
@@ -373,7 +374,7 @@
       )
     }
   }
-  #spaced_caps(title, size: 13pt)
+  #spaced-caps(title, size: 13pt)
   #v(4mm)
   #line(length: 100%, stroke: rule-stroke)
   #v(8mm)
@@ -381,63 +382,63 @@
   #body
 ]
 
-#let side_caption(kind, number, caption) = context {
+#let side-caption(kind, number, caption) = context {
   set par(justify: false)
   set text(size: 9pt)
   // Multi-line captions should flow toward the major column: left-aligned on
   // odd pages (marginalia on the right), right-aligned on even pages
   // (marginalia on the left).
-  let a = if page_is_odd() { left } else { right }
+  let a = if page-is-odd() { left } else { right }
   align(a)[
     #text(weight: "bold", fill: label-color)[#kind #number] \
     #caption
   ]
 }
 
-#let image_figure(number, caption, body) = context {
-  let caption-block = side_caption("Figure", number, caption)
+#let image-figure(number, caption, body) = context {
+  let caption-block = side-caption("Figure", number, caption)
 
   block(above: 1.65em, below: 1.1em)[
-    #major_column_block[
+    #major-column-block[
       #box(width: 100%)[
       #box(width: 100%)[
         #align(left)[#body]
       ]
-      #minor_bottom[#caption-block]
+      #minor-bottom[#caption-block]
       ]
     ]
-    #metadata((number: number, caption: caption)) #figure_index_label
+    #metadata((number: number, caption: caption)) #figure-index-label
   ]
 }
 
-#let numbered_equation(number, body) = block(above: 0.9em, below: 1em)[
-  #major_column_block[
+#let numbered-equation(number, body) = block(above: 0.9em, below: 1em)[
+  #major-column-block[
     #box(width: 100%)[
       #align(center)[#body]
-      #minor_middle[#text(size: 9.5pt, fill: label-color)[(#number)]]
+      #minor-middle[#text(size: 9.5pt, fill: label-color)[(#number)]]
     ]
   ]
 ]
 
-#let side_caption_table(number, caption, widths, rows) = {
+#let side-caption-table(number, caption, widths, rows) = {
   let column-count = widths.len()
   let header = rows.at(0)
   let body = rows.slice(1)
 
   block(above: 1.4em, below: 1.1em)[
-    #major_column_block[
+    #major-column-block[
       #box(width: 100%)[
       #table(
         columns: widths,
         inset: (x: 6pt, y: 5pt),
         stroke: (x: none, y: 0.45pt + luma(75%)),
         align: (x, y) => if x == column-count - 1 { right } else { left },
-        table.header(..header.map(cell => strong(spaced_smallcaps(cell, size: 8.2pt)))),
+        table.header(..header.map(cell => strong(spaced-smallcaps(cell, size: 8.2pt)))),
         ..body.flatten(),
       )
-      #minor_bottom[#side_caption("Table", number, caption)]
+      #minor-bottom[#side-caption("Table", number, caption)]
       ]
     ]
-    #metadata((number: number, caption: caption)) #table_index_label
+    #metadata((number: number, caption: caption)) #table-index-label
   ]
 }

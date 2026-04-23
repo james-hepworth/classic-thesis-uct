@@ -12,7 +12,7 @@
   degree: "Doctor of Philosophy",
   name: "Candidate Name",
   supervisor: "Primary Supervisor",
-  co_supervisor: "Co-supervisor or Second Supervisor",
+  co-supervisor: "Co-supervisor or Second Supervisor",
   faculty: "Faculty or School",
   department: "Department or Research Unit",
   university: "University Name",
@@ -31,7 +31,7 @@
 #show link: set text(fill: accent)
 #show heading.where(level: 2): it => [
   #block(above: 1.65em, below: 1.45em)[
-    #spaced_caps([
+    #spaced-caps([
       #counter(heading).display(it.numbering)
       #h(0.85em)
       #it.body
@@ -78,7 +78,7 @@
     bottom: page-bottom-margin,
   ),
   header: none,
-  footer: folio_footer("i", shift: 0mm),
+  footer: folio-footer("i", shift: 0mm),
 )
 
 #title-page(meta)
@@ -118,8 +118,8 @@ Replace this abstract with a concise overview of the proposal. A useful structur
     top: page-top-margin,
     bottom: page-bottom-margin,
   ),
-  header: classic_header(),
-  footer: folio_footer("1"),
+  header: classic-header(),
+  footer: folio-footer("1"),
 )
 #counter(page).update(1)
 

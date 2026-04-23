@@ -9,7 +9,7 @@ List the major resources needed to complete the project, such as equipment, soft
 
 If your department requires a costing section, replace this text with a concise table of expected expenses and funding assumptions.
 
-#side_caption_table(
+#side-caption-table(
   "5.1",
   [Example budget table for proposal planning.],
   (1.65fr, 2.05fr, 0.95fr),

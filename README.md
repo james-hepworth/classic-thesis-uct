@@ -143,31 +143,6 @@ If compilation fails with “font not found”, install the families above. EB G
 
 This is an early release. Bug reports, layout regressions, and pull requests are welcome through the project's issue tracker.
 
-## Local development
-
-To test changes to this package against the bundled template before publishing a new version, install it under your local Typst data directory and run `typst init` against the local namespace:
-
-```sh
-# macOS
-ln -snf "$(pwd)" "$HOME/Library/Application Support/typst/packages/preview/classic-thesis-uct/0.1.0"
-
-# Linux (XDG)
-ln -snf "$(pwd)" "${XDG_DATA_HOME:-$HOME/.local/share}/typst/packages/preview/classic-thesis-uct/0.1.0"
-```
-
-After symlinking, `typst compile template/main.typ` resolves the `@preview/classic-thesis-uct:0.1.0` import against this checkout. To test the full init flow:
-
-```sh
-typst init @preview/classic-thesis-uct:0.1.0 /tmp/thesis-test
-typst compile /tmp/thesis-test/main.typ
-```
-
-Regenerate the thumbnail after layout-affecting changes:
-
-```sh
-typst compile -f png --pages 1 --ppi 250 template/main.typ thumbnail.png
-```
-
 ## Licensing
 
 The package is distributed under a split SPDX expression — `GPL-2.0-or-later AND MIT-0` — so that documents scaffolded from the template are not encumbered by the copyleft terms that apply to the layout code itself.
