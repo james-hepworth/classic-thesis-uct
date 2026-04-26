@@ -30,11 +30,11 @@ Bundled binaries live in `fonts/` for local development convenience but are excl
 ├── typst.toml                 # Package manifest (Universe metadata, exclude rules, [template])
 ├── README.md                  # Universe-facing documentation (don't add an H1; Universe injects one)
 ├── LICENSE                    # GPL v2 text
-├── lib.typ                    # Package entry point — re-exports from classicthesis.typ
-├── classicthesis.typ          # Layout module: page setup, fonts, helpers, chapter/figure/equation blocks
+├── lib.typ                    # Package entry point — re-exports from classicthesis-uct.typ
+├── classicthesis-uct.typ      # Layout module: page setup, fonts, helpers, chapter/figure/equation blocks
 ├── thumbnail.png              # Universe thumbnail (page 1 of template @ 250 ppi)
 ├── assets/
-│   └── uct.jpg                # Institutional logo bundled with the package (used by title-page)
+│   └── UCT_logo.png           # Institutional logo bundled with the package (used by title-page by default)
 ├── template/                  # Files copied into a user's project by `typst init`
 │   ├── main.typ               # Imports @preview/uct-classic-thesis:0.1.0, builds the document
 │   ├── references.bib         # Example bibliography
@@ -56,9 +56,9 @@ When bumping the version: update `version` in `typst.toml`, the import strings i
 
 ### Package entry (`lib.typ`)
 
-Thin wrapper that does `#import "classicthesis.typ": *` so downstream documents need only one import line. Add or remove re-exports here if the public surface should diverge from the layout module.
+Thin wrapper that does `#import "classicthesis-uct.typ": *` so downstream documents need only one import line. Add or remove re-exports here if the public surface should diverge from the layout module.
 
-### Layout module (`classicthesis.typ`)
+### Layout module (`classicthesis-uct.typ`)
 
 Top-of-file constants double as the design tokens:
 
@@ -71,7 +71,7 @@ Public functions (all re-exported by `lib.typ`):
 | Symbol | Purpose |
 |--------|---------|
 | `configure(meta, body)` | Show-rule template; **must be invoked as `#show: configure.with(meta)`** so set rules reach the whole document. |
-| `title-page(meta)`, `title-back(meta)` | Title recto and verso. The recto loads `assets/uct.jpg` from inside the package. |
+| `title-page(meta)`, `title-back(meta)` | Title recto and verso. The recto uses `meta.logo` when provided, otherwise it loads `assets/UCT_logo.png` from inside the package. |
 | `abstract-page`, `contents-page`, `list-of-figures-page`, `list-of-tables-page`, `acronym-page` | Front-matter sections. Each emits a hidden `heading(level: 1, outlined: false, numbering: none)` via `front-heading` so the running-head logic and chapter-opener detection treat them like chapters without polluting the outline or chapter counter. |
 | `chapter(title, number, body)` | Chapter opener: hidden level-1 heading (visible counterpart in `spaced_caps` + rule), large grey numeral in the outer margin via `place`. |
 | `image_figure`, `side_caption_table`, `numbered_equation` | Major-column blocks with marginalia. |
