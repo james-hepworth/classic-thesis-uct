@@ -1,4 +1,4 @@
-#import "@preview/classic-thesis-uct:0.1.0": *
+#import "@preview/classic-thesis-uct:0.1.1": *
 
 #let content = [
 This chapter should explain how the research questions will be answered and why the chosen approach is appropriate. The examples below demonstrate common proposal elements that are often expected in reviewable academic documents.

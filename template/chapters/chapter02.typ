@@ -1,4 +1,4 @@
-#import "@preview/classic-thesis-uct:0.1.0": *
+#import "@preview/classic-thesis-uct:0.1.1": *
 
 #let content = [
 Use this chapter to position the proposal within the existing body of knowledge. The aim is not to summarise everything, but to show command of the area and isolate the specific opening for the proposed contribution.

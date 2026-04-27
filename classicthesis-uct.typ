@@ -156,6 +156,7 @@
     lang: "gb",
     fill: black,
   )
+  show strong: it => text(font: "EB Garamond", weight: "bold")[#it.body]
   set par(justify: true, leading: 0.45em, spacing: 0.45em, first-line-indent: 1.5em)
   set math.equation(numbering: n => context numbering(
     "(1.1)",
