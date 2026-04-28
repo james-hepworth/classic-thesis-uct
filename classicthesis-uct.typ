@@ -36,7 +36,7 @@
 
 #let spaced-smallcaps(body, size: 10pt) = text(font: smallcaps-font, size: size, tracking: 0.02em)[#body]
 #let spaced-caps(body, size: 10pt) = text(font: heading-font, size: size, tracking: 0.01em)[#body]
-#let page-is-odd() = calc.rem(counter(page).get().first(), 2) == 1
+#let page-is-odd() = calc.rem(here().page(), 2) == 1
 
 // Page number centred on the physical page (not on the major column). For the
 // asymmetric main-matter layout the content area is offset from the page
@@ -425,11 +425,7 @@
 #let side-caption(kind, number, caption) = context {
   set par(justify: false)
   set text(size: 9pt)
-  // Multi-line captions should flow toward the major column: left-aligned on
-  // odd pages (marginalia on the right), right-aligned on even pages
-  // (marginalia on the left).
-  let a = if page-is-odd() { left } else { right }
-  align(a)[
+  [
     #text(weight: "bold", fill: label-color)[#kind #number] \
     #caption
   ]
