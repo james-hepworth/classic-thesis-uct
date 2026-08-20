@@ -1,8 +1,28 @@
-#let body-font = "EB Garamond 12"
-#let display-font = "EB Garamond 12"
-#let heading-font = "EB Garamond SC 12"
-#let smallcaps-font = "EB Garamond SC 12"
+// Select the proportional typeface used throughout the template. Set this to
+// `"adobe-garamond"` to use the bundled Adobe Garamond Pro files instead.
+#let font-choice = "eb-garamond"
+#let selected-font = if font-choice == "adobe-garamond" {
+  "Adobe Garamond Pro"
+} else {
+  "EB Garamond 12"
+}
+#let body-font = selected-font
+#let display-font = selected-font
+#let heading-font = selected-font
+#let smallcaps-font = selected-font
+#let smallcaps-features = if font-choice == "adobe-garamond" { ("smcp",) } else { () }
 #let mono-font = "New Computer Modern"
+#let font-choice-state = state("classic-thesis-font-choice", "eb-garamond")
+
+#let font-family(choice) = if choice == "adobe-garamond" {
+  "Adobe Garamond Pro"
+} else {
+  "EB Garamond 12"
+}
+#let font-features(choice) = if choice == "adobe-garamond" { ("smcp",) } else { () }
+#let font-text(body, ..args) = context {
+  text(font: font-family(font-choice-state.get()), features: font-features(font-choice-state.get()), ..args)[#body]
+}
 
 #let accent = rgb("#002040")
 #let chapter-gray = luma(58%)
@@ -21,6 +41,7 @@
 #let outer-margin = 50mm
 #let page-top-margin = 32mm
 #let page-bottom-margin = 27mm
+#let page-body-height = 297mm - page-top-margin - page-bottom-margin
 #let figure-space-above = 1.2em
 #let figure-space-below = 1.2em
 #let table-space-above = 1.8em
@@ -34,8 +55,14 @@
 #let figure-index-label = <figure-index-entry>
 #let table-index-label = <table-index-entry>
 
-#let spaced-smallcaps(body, size: 10pt) = text(font: smallcaps-font, size: size, tracking: 0.02em)[#body]
-#let spaced-caps(body, size: 10pt) = text(font: heading-font, size: size, tracking: 0.01em)[#body]
+#let spaced-smallcaps(body, size: 10pt) = context {
+  let choice = font-choice-state.get()
+  text(font: font-family(choice), features: font-features(choice), size: size, tracking: 0.02em)[#body]
+}
+#let spaced-caps(body, size: 10pt) = context {
+  let choice = font-choice-state.get()
+  text(font: font-family(choice), features: font-features(choice), size: size, tracking: 0.01em)[#body]
+}
 #let page-is-odd() = calc.rem(here().page(), 2) == 1
 
 // Page number centred on the physical page (not on the major column). For the
@@ -74,8 +101,7 @@
   // Suppress the running header on chapter-opening pages — the chapter title
   // and its rule already dominate the top of the page, so a second title
   // above them just looks redundant.
-  let opens-chapter = query(heading.where(level: 1))
-    .any(h => h.location().page() == cur)
+  let opens-chapter = query(heading.where(level: 1)).any(h => h.location().page() == cur)
   if opens-chapter { return [] }
   let title = running-head-title()
   if title == none { return [] }
@@ -150,13 +176,19 @@
     author: meta.name,
   )
 
+  let choice = if "font-choice" in meta { meta.font-choice } else { font-choice }
+  font-choice-state.update(choice)
+
   set text(
-    font: body-font,
+    font: font-family(choice),
     size: 10pt,
     lang: "gb",
     fill: black,
   )
-  show strong: it => text(font: "EB Garamond", weight: "bold")[#it.body]
+  show strong: it => context {
+    let current-choice = font-choice-state.get()
+    text(font: font-family(current-choice), weight: "bold")[#it.body]
+  }
   set par(justify: true, leading: 0.45em, spacing: 0.45em, first-line-indent: 1.5em)
   set math.equation(numbering: n => context numbering(
     "(1.1)",
@@ -184,17 +216,19 @@
   show math.equation.where(block: true): it => context {
     let chapter-number = counter(heading).at(it.location()).first()
     let equation-number = counter(math.equation).at(it.location()).first()
+    let h-num = heading.numbering
+    let chap-str = if h-num != none { numbering(h-num, chapter-number) } else { str(chapter-number) }
     block(
-    above: equation-space-above,
-    below: equation-space-below,
-  )[
-    #major-column-block[
-      #box(width: 100%)[
-        #align(center)[#it.body]
-        #minor-middle[#text(size: 9.5pt, fill: label-color)[#numbering("(1.1)", chapter-number, equation-number)]]
+      above: equation-space-above,
+      below: equation-space-below,
+    )[
+      #major-column-block[
+        #box(width: 100%)[
+          #align(center)[#it.body]
+          #minor-middle[#text(size: 9.5pt, fill: label-color)[(#chap-str.#equation-number)]]
+        ]
       ]
     ]
-  ]
   }
 
   body
@@ -239,7 +273,7 @@
         logo
       }
       #v(20mm)
-      #spaced-caps(meta.title, size: 21pt)
+      #spaced-caps(meta.title, size: 15pt)
       #v(8mm)
       #spaced-smallcaps(meta.name, size: 10.5pt)
       #v(30mm)
@@ -263,7 +297,7 @@
 #let title-back(meta) = [
   #set page(header: none, footer: none, numbering: none)
   #set par(first-line-indent: 0pt)
-  #v(188mm)
+  #v(178mm)
   #text(size: 11.5pt)[#meta.name: #emph[#meta.title,] #meta.date]
   #v(9mm)
   #spaced-smallcaps("Supervisors", size: 9.5pt)
@@ -302,28 +336,34 @@
   #major-column-block[
     #context {
       let entries = query(selector(heading)).filter(it => it.outlined and it.level <= 3)
-      
 
       grid(
         columns: (1fr, auto),
         column-gutter: 12pt,
         row-gutter: 6pt,
-        ..entries.map(entry => {
-          let indent = if entry.level == 1 {
-            0pt
-          } else if entry.level == 2 {
-            1.6em
-          } else {
-            3.2em
-          }
-          let number = numbering(entry.numbering, ..counter(heading).at(entry.location()))
-          let page = counter(page).at(entry.location()).first()
+        ..entries
+          .map(entry => {
+            let indent = if entry.level == 1 {
+              0pt
+            } else if entry.level == 2 {
+              1.6em
+            } else {
+              3.2em
+            }
+            let number = if entry.numbering != none {
+              let num = numbering(entry.numbering, ..counter(heading).at(entry.location()))
+              [#num #h(0.55em)]
+            } else {
+              []
+            }
+            let page = counter(page).at(entry.location()).first()
 
-          (
-            [#pad(left: indent)[#link(entry.location())[#number #h(0.55em) #entry.body #v(0.3em)]]],
-            [#link(entry.location())[#page]],
-          )
-        }).flatten(),
+            (
+              [#pad(left: indent)[#link(entry.location())[#number#entry.body #v(0.3em)]]],
+              [#link(entry.location())[#page]],
+            )
+          })
+          .flatten(),
       )
     }
   ]
@@ -343,13 +383,15 @@
           columns: (1fr, auto),
           column-gutter: 12pt,
           row-gutter: 6pt,
-          ..entries.map(entry => {
-            let data = entry.value
-            (
-              [#text(weight: "bold", fill: label-color)[#kind-name #data.number] #h(0.6em) #data.caption #v(0.6em)],
-              [#counter(page).at(entry.location()).first()],
-            )
-          }).flatten(),
+          ..entries
+            .map(entry => {
+              let data = entry.value
+              (
+                [#text(weight: "bold", fill: label-color)[#kind-name #data.number] #h(0.6em) #data.caption #v(0.6em)],
+                [#counter(page).at(entry.location()).first()],
+              )
+            })
+            .flatten(),
         )
       ]
     }
@@ -386,7 +428,10 @@
 #let bibliography-page(body) = [
   #pagebreak(to: "odd")
   #front-heading("References")
-  #major-column-block[#body]
+  #major-column-block[
+    #set par(spacing: 1em)
+    #body
+  ]
 ]
 
 #let chapter(title, number, body) = [
@@ -396,11 +441,7 @@
   #counter(figure.where(kind: table)).update(0)
   #v(24mm)
   #context {
-    let number-text = text(
-      font: display-font,
-      size: 82pt,
-      fill: chapter-gray,
-    )[#number]
+    let number-text = font-text(size: 82pt, fill: chapter-gray)[#number]
     // The chapter number is placed in the outer margin. It sits adjacent to
     // the title column, pulled up so its top roughly aligns with the title.
     if page-is-odd() {
@@ -439,7 +480,9 @@
   #context {
     let chapter-number = counter(heading).get().first()
     let figure-number = counter(figure.where(kind: image)).get().first()
-    let label = numbering("1.1", chapter-number, figure-number)
+    let h-num = heading.numbering
+    let chap-str = if h-num != none { numbering(h-num, chapter-number) } else { str(chapter-number) }
+    let label = chap-str + "." + str(figure-number)
 
     [
       #v(figure-space-above)
@@ -448,7 +491,9 @@
           #box(width: 100%)[
             #align(center)[#body]
           ]
-          #minor-bottom[#side-caption("Figure", label, caption)]
+          #minor-top[
+            #v(1em) #side-caption("Figure", label, caption)
+          ]
         ]
       ]
       #metadata((
@@ -465,6 +510,47 @@
   math.equation(block: true, equation-body)
 }
 
+#let side-caption-table-grid(widths, aligns, rows) = {
+  let column-count = widths.len()
+  let header = rows.at(0)
+  let body = rows.slice(1)
+
+  // Build alignment function: if `aligns` is provided use it, otherwise
+  // default to left everywhere except the last column which is right-aligned.
+  let align-fn = if aligns != none {
+    (x, y) => aligns.at(x)
+  } else {
+    (x, y) => if x == column-count - 1 { right } else { left }
+  }
+
+  set text(size: 9pt)
+  table(
+    columns: widths,
+    inset: 3pt,
+    stroke: 0.15pt,
+    align: align-fn,
+    table.hline(stroke: 1.2pt),
+    table.header(..header.map(cell => strong(cell))),
+    table.hline(stroke: 0.5pt),
+    ..body.flatten(),
+    table.hline(stroke: 1.2pt),
+  )
+}
+
+// #let side-caption-table-entry(caption) = context {
+//   let chapter-number = counter(heading).get().first()
+//   let table-number = counter(figure.where(kind: table)).get().first()
+//   let label = numbering("1.1", chapter-number, table-number)
+
+//   [
+//     #minor-top[#side-caption("Table", label, caption)]
+//     #metadata((
+//       number: label,
+//       caption: caption,
+//     )) #table-index-label
+//   ]
+// }
+
 #let side-caption-table(caption, widths, aligns: none, rows) = figure(
   kind: table,
   supplement: [Table],
@@ -473,32 +559,51 @@
   #context {
     let chapter-number = counter(heading).get().first()
     let table-number = counter(figure.where(kind: table)).get().first()
-    let label = numbering("1.1", chapter-number, table-number)
-    let column-count = widths.len()
-    let header = rows.at(0)
-    let body = rows.slice(1)
-
-    // Build alignment function: if `aligns` is provided use it, otherwise
-    // default to left everywhere except the last column which is right-aligned.
-    let align-fn = if aligns != none {
-      (x, y) => aligns.at(x)
-    } else {
-      (x, y) => if x == column-count - 1 { right } else { left }
-    }
+    let h-num = heading.numbering
+    let chap-str = if h-num != none { numbering(h-num, chapter-number) } else { str(chapter-number) }
+    let label = chap-str + "." + str(table-number)
 
     [
       #v(table-space-above)
       #major-column-block[
         #box(width: 100%)[
-        #table(
-          columns: widths,
-          inset: (x: 6pt, y: 5pt),
-          stroke: (x: none, y: 0.45pt + luma(75%)),
-          align: align-fn,
-          table.header(..header.map(cell => strong(spaced-smallcaps(cell, size: 8.2pt)))),
-          ..body.flatten(),
-        )
-        #minor-bottom[#side-caption("Table", label, caption)]
+          #side-caption-table-grid(widths, aligns, rows)
+          #minor-top[#side-caption("Table", label, caption)]
+        ]
+      ]
+      #metadata((
+        number: label,
+        caption: caption,
+      )) #table-index-label
+      #v(table-space-below)
+    ]
+  }
+]
+
+#let side-caption-table-rotated(caption, widths, aligns: none, rotated-width: 15cm, rows) = figure(
+  kind: table,
+  supplement: [Table],
+  caption: none,
+)[
+  #context {
+    let chapter-number = counter(heading).get().first()
+    let table-number = counter(figure.where(kind: table)).get().first()
+    let h-num = heading.numbering
+    let chap-str = if h-num != none { numbering(h-num, chapter-number) } else { str(chapter-number) }
+    let label = chap-str + "." + str(table-number)
+
+    [
+      #v(table-space-above)
+      #major-column-block[
+        #box(width: 100%)[
+          #align(center)[
+            #rotate(-90deg, reflow: true)[
+              #box(width: rotated-width)[
+                #side-caption-table-grid(widths, aligns, rows)
+              ]
+            ]
+          ]
+          #minor-top[#side-caption("Table", label, caption)]
         ]
       ]
       #metadata((
