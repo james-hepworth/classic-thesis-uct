@@ -1,6 +1,6 @@
 [package]
 name = "classic-thesis-uct"
-version = "0.1.2"
+version = "0.1.3"
 entrypoint = "lib.typ"
 authors = ["James Hepworth <https://github.com/james-hepworth>"]
 # Split expression: the package (layout module, lib.typ, assets) is GPL v2 or

@@ -48,6 +48,11 @@
 #let table-space-below = 1.8em
 #let equation-space-above = 1.8em
 #let equation-space-below = 1.9em
+#let list-space-above = 1.0em
+#let list-space-below = 1.0em
+#let list-indent = 1.5em
+#let list-body-indent = 0.55em
+#let list-item-spacing = 0.6em
 // Front matter (title page through acronyms) uses a single column the same
 // width as `major-column`, but page-centred rather than offset. A4 is 210mm
 // wide, so the side margins are (210mm − major-column) / 2 on each side.
@@ -190,6 +195,18 @@
     text(font: font-family(current-choice), weight: "bold")[#it.body]
   }
   set par(justify: true, leading: 0.45em, spacing: 0.45em, first-line-indent: 1.5em)
+  set list(
+    indent: list-indent,
+    body-indent: list-body-indent,
+    spacing: list-item-spacing,
+  )
+  set enum(
+    indent: list-indent,
+    body-indent: list-body-indent,
+    spacing: list-item-spacing,
+  )
+  show list: set block(above: list-space-above, below: list-space-below)
+  show enum: set block(above: list-space-above, below: list-space-below)
   set math.equation(numbering: n => context numbering(
     "(1.1)",
     counter(heading).get().first(),
