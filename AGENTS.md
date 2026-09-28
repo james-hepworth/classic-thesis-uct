@@ -17,8 +17,9 @@ Migrated from a LaTeX implementation (now deleted) to native Typst.
 
 ## Font Dependencies
 
-- **EB Garamond 12** — body
+- **EB Garamond 12** — body (Regular + Italic only, no bold face)
 - **EB Garamond SC 12** — small caps and headings
+- **EB Garamond** — bold/strong text, from `fonts/eb-garamond/eb-garamond-3/EBGaramond-Bold.ttf`
 - **New Computer Modern** — monospace
 
 Bundled binaries live in `fonts/` for local development convenience but are excluded from the published package via `typst.toml` (see `exclude`).
@@ -72,9 +73,11 @@ Public functions (all re-exported by `lib.typ`):
 |--------|---------|
 | `configure(meta, body)` | Show-rule template; **must be invoked as `#show: configure.with(meta)`** so set rules reach the whole document. |
 | `title-page(meta)`, `title-back(meta)` | Title recto and verso. The recto uses `meta.logo` when provided, otherwise it loads `assets/UCT_logo.png` from inside the package. |
-| `abstract-page`, `contents-page`, `list-of-figures-page`, `list-of-tables-page`, `acronym-page` | Front-matter sections. Each emits a hidden `heading(level: 1, outlined: false, numbering: none)` via `front-heading` so the running-head logic and chapter-opener detection treat them like chapters without polluting the outline or chapter counter. |
+| `abstract-page`, `contents-page`, `list-of-figures-page`, `list-of-tables-page`, `list-of-algorithms-page`, `acronym-page` | Front-matter sections. Each emits a hidden `heading(level: 1, outlined: false, numbering: none)` via `front-heading` so the running-head logic and chapter-opener detection treat them like chapters without polluting the outline or chapter counter. |
 | `chapter(title, number, body)` | Chapter opener: hidden level-1 heading (visible counterpart in `spaced_caps` + rule), large grey numeral in the outer margin via `place`. |
 | `image_figure`, `side_caption_table`, `numbered_equation` | Major-column blocks with marginalia. |
+| `side-caption-algorithm(caption, body)` | Side-caption algorithm block; counter resets per chapter via `chapter()`, listed by `list-of-algorithms-page()`. |
+| `bold-font` | Family used for `strong` text. The `EB Garamond 12` body face has no bold, so strong falls back to the bundled `fonts/eb-garamond/eb-garamond-3/EBGaramond-Bold.ttf` (family `EB Garamond`); that directory must be on the font path (`--font-path fonts`) or installed. |
 | `bibliography-page(body)` | Heading + major-column block. **Takes content, not a path** — the user calls `#bibliography(...)` themselves so paths resolve relative to the project, not the package. |
 | `major_column_block(body)` | Full-width block in the current text area. |
 | `minor_top`, `minor_middle`, `minor_bottom` | Place content in the outer margin, with parity-aware alignment. |
@@ -125,9 +128,13 @@ ln -snf "$(pwd)" "${XDG_DATA_HOME:-$HOME/.local/share}/typst/packages/preview/uc
 Then:
 
 ```sh
-typst compile template/main.typ template/thesis.pdf      # compile in place
+typst compile template/main.typ template/thesis.pdf --font-path fonts   # --font-path so bold resolves
 typst init @preview/uct-classic-thesis:0.1.0 /tmp/test    # exercise the init flow end-to-end
 ```
+
+`.vscode/settings.json` points Tinymist at `fonts/` via `tinymist.fontPaths`, because Tinymist
+builds its own font database at startup — install a font and the preview only picks it up after a
+window reload. If the preview shows strong text in the regular weight, reload the window.
 
 ### Regenerating the thumbnail
 

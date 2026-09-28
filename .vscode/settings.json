@@ -1,0 +1,8 @@
+{
+  // Let Tinymist (the Typst VS Code extension) find this repo's bundled fonts,
+  // including the EB Garamond bold face used for `*strong*` text (the "EB
+  // Garamond 12" body face has no bold of its own). Without this, the preview
+  // silently renders strong text in the regular weight.
+  "tinymist.fontPaths": ["${workspaceFolder}/fonts"],
+  "tinymist.systemFonts": true
+}

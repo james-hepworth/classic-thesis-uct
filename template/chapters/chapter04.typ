@@ -35,6 +35,28 @@ Here, $J(theta)$ is a generic objective function, $w_i$ are optional weights, $y
   ),
 )
 
+#side-caption-algorithm(
+  [Example pseudocode block. Algorithms are numbered separately from figures and tables.],
+  [
+    #table(
+      columns: (auto, 1fr),
+      align: (right, left),
+      column-gutter: 0.7em,
+      inset: (x: 0pt, y: 4pt),
+      stroke: none,
+      table.hline(stroke: 1pt),
+      [], [*Input:* a dataset, an evaluation metric, and a candidate model set $M$ \ *Output:* the selected model and its estimated performance],
+      table.hline(stroke: 0.4pt),
+      [1:], [*for each* candidate model $m in M$ *do*],
+      [2:], [#pad(left: 1.6em)[*Fit:* fit $m$ to the training data]],
+      [3:], [#pad(left: 1.6em)[*Evaluate:* score $m$ on the held-out validation set]],
+      [4:], [*end for*],
+      [5:], [*return* the model with the best validation score],
+      table.hline(stroke: 1pt),
+    )
+  ],
+)
+
 == Ethics and Risk
 
 Document any ethical approval requirements, operational risks, data governance constraints, or feasibility concerns. If the proposal involves human participants, sensitive data, fieldwork, or hazardous environments, reviewers will usually expect this material to be explicit.

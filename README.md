@@ -60,6 +60,7 @@ If you would rather drive the layout yourself, import the module from your own d
 #contents-page()
 #list-of-figures-page()
 #list-of-tables-page()
+#list-of-algorithms-page()
 
 #acronym-page((
   ([HCI], [Human-Computer Interaction]),
@@ -110,10 +111,11 @@ Exported from the package entry point:
 | --- | --- |
 | `configure(meta, body)` | Show-rule template: applies metadata, fonts, paragraph and base page settings. Use as `#show: configure.with(meta)`. |
 | `title-page(meta)`, `title-back(meta)` | Title recto and verso (no header/footer, no folio). Set `meta.logo` to project-local image content to override the default package logo. |
-| `abstract-page(body)`, `contents-page()`, `list-of-figures-page()`, `list-of-tables-page()`, `acronym-page(items)` | Front-matter sections. |
+| `abstract-page(body)`, `contents-page()`, `list-of-figures-page()`, `list-of-tables-page()`, `list-of-algorithms-page()`, `acronym-page(items)` | Front-matter sections. |
 | `chapter(title, number, body)` | Chapter opener: large numeral, title, rule, then body. Emits a hidden level-1 heading for outline and running-head purposes. |
 | `image_figure(number, caption, body)` | Full-width figure with side caption in the outer margin. |
 | `side_caption_table(number, caption, widths, rows)` | Table with side caption. |
+| `side-caption-algorithm(caption, body)` | Algorithm block with a side caption reading “Algorithm N.N”. `body` is the pseudocode (e.g. a `table` with numbered lines); numbered per chapter and listed by `list-of-algorithms-page()`. |
 | `numbered_equation(number, body)` | Centred display equation, label vertically centred in the outer margin. |
 | `bibliography-page(body)` | Odd-page break, “References” heading, then `body` rendered in the major column. The user calls `#bibliography(...)` themselves so paths resolve relative to the project. |
 | `major_column_block(body)` | Full-width block sized to the current page’s text area. |
@@ -139,6 +141,7 @@ The template uses these families, which Typst will look up in the system or bund
 
 - **EB Garamond 12** — body
 - **EB Garamond SC 12** — small caps and headings
+- **EB Garamond** — bold (strong) text only: the body face ships no bold, so `*strong*` falls back to `EBGaramond-Bold.ttf` (family `EB Garamond`). Point the compiler at that font, or strong text silently renders in the regular weight: `--font-path fonts` on the CLI, `TYPST_FONT_PATHS=fonts`, `tinymist.fontPaths` in Tinymist (this repo's `.vscode/settings.json` already does that), or install the bold face system-wide.
 - **New Computer Modern** — monospace
 
 If compilation fails with “font not found”, install the families above. EB Garamond is freely available from [Georg Duffner](https://github.com/octaviopardo/EBGaramond12).

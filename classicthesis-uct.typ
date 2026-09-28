@@ -10,8 +10,12 @@
 #let display-font = selected-font
 #let heading-font = selected-font
 #let smallcaps-font = selected-font
-#let smallcaps-features = if font-choice == "adobe-garamond" { ("smcp",) } else { () }
 #let mono-font = "New Computer Modern"
+// Bold fallback. `EB Garamond 12` (the body face) only ships Regular and
+// Italic, so asking it for weight "bold" renders regular. The real bold lives
+// in fonts/eb-garamond/eb-garamond-3/EBGaramond-Bold.ttf, whose internal
+// family name is "EB Garamond", so strong text falls back to that family.
+#let bold-font = "EB Garamond"
 #let font-choice-state = state("classic-thesis-font-choice", "eb-garamond")
 
 #let font-family(choice) = if choice == "adobe-garamond" {
@@ -19,7 +23,11 @@
 } else {
   "EB Garamond 12"
 }
-#let font-features(choice) = if choice == "adobe-garamond" { ("smcp",) } else { () }
+// Small capitals are an OpenType feature (`smcp`), not a separate family. Both
+// EB Garamond 12 and Adobe Garamond Pro carry it, so it is requested
+// unconditionally — previously it was only enabled for the Adobe choice, which
+// is why EB Garamond headings rendered as plain text.
+#let font-features(choice) = ("smcp",)
 #let font-text(body, ..args) = context {
   text(font: font-family(font-choice-state.get()), features: font-features(font-choice-state.get()), ..args)[#body]
 }
@@ -59,6 +67,8 @@
 #let front-matter-side-margin = (210mm - major-column) / 2
 #let figure-index-label = <figure-index-entry>
 #let table-index-label = <table-index-entry>
+#let algorithm-index-label = <algorithm-index-entry>
+#let algorithm-counter = counter("algorithm")
 
 #let spaced-smallcaps(body, size: 10pt) = context {
   let choice = font-choice-state.get()
@@ -66,7 +76,7 @@
 }
 #let spaced-caps(body, size: 10pt) = context {
   let choice = font-choice-state.get()
-  text(font: font-family(choice), features: font-features(choice), size: size, tracking: 0.01em)[#body]
+  text(font: font-family(choice), features: font-features(choice), size: size, tracking: 0.01em)[#smallcaps(body)]
 }
 #let page-is-odd() = calc.rem(here().page(), 2) == 1
 
@@ -192,7 +202,15 @@
   )
   show strong: it => context {
     let current-choice = font-choice-state.get()
-    text(font: font-family(current-choice), weight: "bold")[#it.body]
+    // Strong text falls back through `bold-font` (family "EB Garamond", which
+    // includes the real EBGaramond-Bold.ttf) because the `EB Garamond 12` body
+    // face has no bold of its own. Adobe Garamond Pro carries its own bold.
+    let families = if current-choice == "adobe-garamond" {
+      (font-family(current-choice),)
+    } else {
+      (bold-font, font-family(current-choice))
+    }
+    text(font: families, weight: "bold")[#it.body]
   }
   set par(justify: true, leading: 0.45em, spacing: 0.45em, first-line-indent: 1.5em)
   set list(
@@ -315,7 +333,11 @@
   #set page(header: none, footer: none, numbering: none)
   #set par(first-line-indent: 0pt)
   #v(178mm)
-  #text(size: 11.5pt)[#meta.name: #emph[#meta.title,] #meta.date]
+  #text(size: 9.5pt)[#meta.name]
+  #linebreak()
+  #emph[#meta.title]
+  #linebreak()
+  #meta.date
   #v(9mm)
   #spaced-smallcaps("Supervisors", size: 9.5pt)
   #linebreak()
@@ -419,6 +441,8 @@
 
 #let list-of-tables-page() = list-page("List of Tables", table-index-label, "Table")
 
+#let list-of-algorithms-page() = list-page("List of Algorithms", algorithm-index-label, "Algorithm")
+
 #let acronym-page(items) = [
   #pagebreak()
   #front-heading("Acronyms")
@@ -456,6 +480,7 @@
   #counter(math.equation).update(0)
   #counter(figure.where(kind: image)).update(0)
   #counter(figure.where(kind: table)).update(0)
+  #algorithm-counter.update(0)
   #v(24mm)
   #context {
     let number-text = font-text(size: 82pt, fill: chapter-gray)[#number]
@@ -486,6 +511,34 @@
   [
     #text(weight: "bold", fill: label-color)[#kind #number] \
     #caption
+  ]
+}
+
+// Side-caption algorithm block, same marginalia treatment as figures and
+// tables: the algorithm body spans the major column, the caption ("Algorithm
+// N.N") sits in the outer margin. Reuses `side-caption` and must therefore be
+// defined after it.
+
+#let side-caption-algorithm(caption, body) = context {
+  let algorithm-number = algorithm-counter.get().first() + 1
+  algorithm-counter.update(algorithm-number)
+  let chapter-number = counter(heading).get().first()
+  let h-num = heading.numbering
+  let chap-str = if h-num != none { numbering(h-num, chapter-number) } else { str(chapter-number) }
+  let label = chap-str + "." + str(algorithm-number)
+  [
+    #v(table-space-above)
+    #major-column-block[
+      #box(width: 100%)[
+        #minor-top[#side-caption("Algorithm", label, caption)]
+        #body
+      ]
+    ]
+    #metadata((
+      number: label,
+      caption: caption,
+    )) #algorithm-index-label
+    #v(table-space-below)
   ]
 }
 

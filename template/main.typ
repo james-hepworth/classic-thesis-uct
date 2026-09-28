@@ -46,7 +46,7 @@
 ]
 #show heading.where(level: 3): it => [
   #block(above: 1.65em, below: 1.45em)[
-    #text(font: display-font, style: "italic", size: 9.5pt, tracking: 0.01em)[
+    #text(font: display-font, style: "italic", size: 8.5pt, tracking: 0.01em)[
       #smallcaps([
       #counter(heading).display(it.numbering)
       #h(0.85em)
@@ -59,10 +59,22 @@
 #show heading.where(level: 4): it => [
   #block(above: 1.65em, below: 1.45em)[
     #pad(left: 1.6em)[
-      #text(font: display-font, style: "italic", size: 9.5pt, tracking: 0.01em)[
+      #text(font: display-font, style: "italic", size: 8.5pt, tracking: 0.01em)[
         #smallcaps([
           #counter(heading).display(it.numbering)
           #h(0.85em)
+          #it.body
+        ])
+      ]
+    ]
+  ]
+  #block(spacing: 0pt)[]
+]
+#show heading.where(level: 5): it => [
+  #block(above: 1.65em, below: 1.45em)[
+    #pad(left: 1.6em)[
+      #text(font: display-font, style: "italic", size: 8.5pt, tracking: 0.01em)[
+        #smallcaps([
           #it.body
         ])
       ]
@@ -101,6 +113,7 @@ Replace this abstract with a concise overview of the proposal. A useful structur
 #contents-page()
 #list-of-figures-page()
 #list-of-tables-page()
+#list-of-algorithms-page()
 
 #acronym-page((
   ([AI], [Artificial Intelligence]),
