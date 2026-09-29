@@ -1,4 +1,4 @@
-#import "@preview/classic-thesis-uct:0.1.3": *
+#import "@preview/classic-thesis-uct:0.1.4": *
 
 #let content = [
 == Milestones

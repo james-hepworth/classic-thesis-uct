@@ -425,9 +425,10 @@
           ..entries
             .map(entry => {
               let data = entry.value
+              let target = entry.location()
               (
-                [#text(weight: "bold", fill: label-color)[#kind-name #data.number] #h(0.6em) #data.caption #v(0.6em)],
-                [#counter(page).at(entry.location()).first()],
+                [#link(target)[#text(weight: "bold", fill: label-color)[#kind-name #data.number] #h(0.6em) #data.caption #v(0.6em)]],
+                [#link(target)[#counter(page).at(target).first()]],
               )
             })
             .flatten(),
