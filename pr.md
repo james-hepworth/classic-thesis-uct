@@ -12,10 +12,8 @@ I am submitting
 Please add a brief description of your package below and explain why you think it is useful to others. If this is an update, please briefly say what changed.
 -->
 
-Description: Updates `classic-thesis-uct` from 0.1.3 to 0.1.4.
+Description: Updates `classic-thesis-uct` from 0.1.4 to 0.1.5.
 
-- Adds `side-caption-algorithm` and `list-of-algorithms-page` for numbered, side-captioned pseudocode blocks, with the algorithm counter reset per chapter like figures and tables.
-- Fixes strong/bold text: the `EB Garamond 12` body face ships no bold, so `*strong*` silently rendered regular. It now falls back to the bundled `EB Garamond` bold face (Adobe Garamond Pro keeps its own).
-- Fixes small caps: `smcp` is now requested for both font choices, so EB Garamond headings and `spaced-caps` render in small capitals instead of plain text.
-- Splits the title-back name, title and date onto separate lines.
-- Documents the new `EB Garamond` bold dependency and the algorithm functions in the README.
+- `side-caption-algorithm` is now a `figure` of `kind: "algorithm"`, so algorithms can take a label and be cited with `@` like figures and tables (e.g. `#side-caption-algorithm(...) <alg:foo>` then `@alg:foo` renders "Algorithm 4.1"). Previously it returned plain content, so a label had nothing to attach to.
+- Numbering now uses the figure counter for that kind, still reset per chapter, and the List of Algorithms is unchanged.
+- The template's example algorithm in chapter 4 now carries a label.

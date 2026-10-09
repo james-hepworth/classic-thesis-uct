@@ -1,4 +1,4 @@
-#import "@preview/classic-thesis-uct:0.1.4": *
+#import "@preview/classic-thesis-uct:0.1.5": *
 
 #let content = [
 == Required Resources

@@ -1,4 +1,4 @@
-#import "@preview/classic-thesis-uct:0.1.4": *
+#import "@preview/classic-thesis-uct:0.1.5": *
 #import "chapters/chapter01.typ": content as chapter01
 #import "chapters/chapter02.typ": content as chapter02
 #import "chapters/chapter03.typ": content as chapter03
@@ -34,54 +34,6 @@
 #set bibliography(style: "ieee", title: none)
 #show footnote.entry: set text(size: 8.5pt)
 #show link: set text(fill: accent)
-#show heading.where(level: 2): it => [
-  #block(above: 1.65em, below: 1.45em)[
-    #spaced-caps([
-      #counter(heading).display(it.numbering)
-      #h(0.85em)
-      #it.body
-    ], size: 9.5pt)
-  ]
-  #block(spacing: 0pt)[]
-]
-#show heading.where(level: 3): it => [
-  #block(above: 1.65em, below: 1.45em)[
-    #text(font: display-font, style: "italic", size: 8.5pt, tracking: 0.01em)[
-      #smallcaps([
-      #counter(heading).display(it.numbering)
-      #h(0.85em)
-      #it.body
-      ])
-    ]
-  ]
-  #block(spacing: 0pt)[]
-]
-#show heading.where(level: 4): it => [
-  #block(above: 1.65em, below: 1.45em)[
-    #pad(left: 1.6em)[
-      #text(font: display-font, style: "italic", size: 8.5pt, tracking: 0.01em)[
-        #smallcaps([
-          #counter(heading).display(it.numbering)
-          #h(0.85em)
-          #it.body
-        ])
-      ]
-    ]
-  ]
-  #block(spacing: 0pt)[]
-]
-#show heading.where(level: 5): it => [
-  #block(above: 1.65em, below: 1.45em)[
-    #pad(left: 1.6em)[
-      #text(font: display-font, style: "italic", size: 8.5pt, tracking: 0.01em)[
-        #smallcaps([
-          #it.body
-        ])
-      ]
-    ]
-  ]
-  #block(spacing: 0pt)[]
-]
 
 // Front matter (title page through Acronyms) uses a single column the same
 // width as the major column but centred on the page, with no running header.

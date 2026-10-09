@@ -1,4 +1,4 @@
-#import "@preview/classic-thesis-uct:0.1.4": *
+#import "@preview/classic-thesis-uct:0.1.5": *
 
 #let content = [
 This chapter should explain how the research questions will be answered and why the chosen approach is appropriate. The examples below demonstrate common proposal elements that are often expected in reviewable academic documents.
@@ -55,7 +55,7 @@ Here, $J(theta)$ is a generic objective function, $w_i$ are optional weights, $y
       table.hline(stroke: 1pt),
     )
   ],
-)
+) <alg:model-selection>
 
 == Ethics and Risk
 

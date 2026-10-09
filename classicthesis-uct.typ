@@ -9,8 +9,10 @@
 #let body-font = selected-font
 #let display-font = selected-font
 #let heading-font = selected-font
+// Sub-heading faces (levels 3–4, the italic small-cap rules in the template).
+#let heading-sub-font = "Michelangelus"
 #let smallcaps-font = selected-font
-#let mono-font = "New Computer Modern"
+#let mono-font = "Geist Mono"
 // Bold fallback. `EB Garamond 12` (the body face) only ships Regular and
 // Italic, so asking it for weight "bold" renders regular. The real bold lives
 // in fonts/eb-garamond/eb-garamond-3/EBGaramond-Bold.ttf, whose internal
@@ -68,7 +70,6 @@
 #let figure-index-label = <figure-index-entry>
 #let table-index-label = <table-index-entry>
 #let algorithm-index-label = <algorithm-index-entry>
-#let algorithm-counter = counter("algorithm")
 
 #let spaced-smallcaps(body, size: 10pt) = context {
   let choice = font-choice-state.get()
@@ -200,6 +201,56 @@
     lang: "gb",
     fill: black,
   )
+  show heading.where(level: 2): it => [
+    #block(above: 1.65em, below: 1.45em)[
+      #spaced-caps([
+        #if it.numbering != none [
+          #counter(heading).display(it.numbering)
+          #h(0.85em)
+        ]
+        #it.body
+      ], size: 9.5pt)
+    ]
+    #block(spacing: 0pt)[]
+  ]
+  show heading.where(level: 3): it => [
+    #block(above: 1.65em, below: 1.45em)[
+      #text(font: heading-sub-font, style: "italic", size: 8.5pt, tracking: 0.01em)[
+        #if it.numbering != none [
+          #counter(heading).display(it.numbering)
+          #h(0.85em)
+        ]
+        #it.body
+      ]
+    ]
+    #block(spacing: 0pt)[]
+  ]
+  show heading.where(level: 4): it => [
+    #block(above: 1.65em, below: 1.45em)[
+      #pad(left: 1.6em)[
+        #text(font: heading-sub-font, style: "italic", size: 8.5pt, tracking: 0.01em)[
+          #if it.numbering != none [
+            #counter(heading).display(it.numbering)
+            #h(0.85em)
+          ]
+          #it.body
+        ]
+      ]
+    ]
+    #block(spacing: 0pt)[]
+  ]
+  show heading.where(level: 5): it => [
+    #block(above: 1.65em, below: 1.45em)[
+      #pad(left: 1.6em)[
+        #text(font: display-font, style: "italic", size: 8.5pt, tracking: 0.01em)[
+          #smallcaps([
+            #it.body
+          ])
+        ]
+      ]
+    ]
+    #block(spacing: 0pt)[]
+  ]
   show strong: it => context {
     let current-choice = font-choice-state.get()
     // Strong text falls back through `bold-font` (family "EB Garamond", which
@@ -481,7 +532,7 @@
   #counter(math.equation).update(0)
   #counter(figure.where(kind: image)).update(0)
   #counter(figure.where(kind: table)).update(0)
-  #algorithm-counter.update(0)
+  #counter(figure.where(kind: "algorithm")).update(0)
   #v(24mm)
   #context {
     let number-text = font-text(size: 82pt, fill: chapter-gray)[#number]
@@ -520,28 +571,33 @@
 // N.N") sits in the outer margin. Reuses `side-caption` and must therefore be
 // defined after it.
 
-#let side-caption-algorithm(caption, body) = context {
-  let algorithm-number = algorithm-counter.get().first() + 1
-  algorithm-counter.update(algorithm-number)
-  let chapter-number = counter(heading).get().first()
-  let h-num = heading.numbering
-  let chap-str = if h-num != none { numbering(h-num, chapter-number) } else { str(chapter-number) }
-  let label = chap-str + "." + str(algorithm-number)
-  [
-    #v(table-space-above)
-    #major-column-block[
-      #box(width: 100%)[
-        #minor-top[#side-caption("Algorithm", label, caption)]
-        #body
+#let side-caption-algorithm(caption, body) = figure(
+  kind: "algorithm",
+  supplement: [Algorithm],
+  caption: none,
+)[
+  #context {
+    let chapter-number = counter(heading).get().first()
+    let algorithm-number = counter(figure.where(kind: "algorithm")).get().first()
+    let h-num = heading.numbering
+    let chap-str = if h-num != none { numbering(h-num, chapter-number) } else { str(chapter-number) }
+    let label = chap-str + "." + str(algorithm-number)
+    [
+      #v(table-space-above)
+      #major-column-block[
+        #box(width: 100%)[
+          #minor-top[#side-caption("Algorithm", label, caption)]
+          #body
+        ]
       ]
+      #metadata((
+        number: label,
+        caption: caption,
+      )) #algorithm-index-label
+      #v(table-space-below)
     ]
-    #metadata((
-      number: label,
-      caption: caption,
-    )) #algorithm-index-label
-    #v(table-space-below)
-  ]
-}
+  }
+]
 
 #let side-caption-figure(caption, body) = figure(
   kind: image,

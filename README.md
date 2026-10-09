@@ -1,6 +1,6 @@
 Unofficial PhD thesis or research proposal at the University of Cape Town, in the Classic Thesis tradition.
 
-A two-sided A4 document with mirrored margins, EB Garamond typography in spaced small caps, side-caption figures and tables, margin-set equation numbers, and a centred-column front matter (title page through acronyms) that gives way to the asymmetric major-column layout in the main matter.
+A two-sided A4 document with mirrored margins, EB Garamond typography in spaced small caps, side-caption figures, tables and algorithms, margin-set equation numbers, and a centred-column front matter (title page through acronyms) that gives way to the asymmetric major-column layout in the main matter.
 
 This project is inspired by the [Classic Thesis](https://bitbucket.org/amiede/workspace/projects/CT) project by André Miede and adapted for use at the University of Cape Town.
 
@@ -11,7 +11,7 @@ The project is in no way affiliated with the University of Cape Town or André M
 The fastest way is to scaffold a new project with the Typst CLI:
 
 ```sh
-typst init @preview/classic-thesis-uct:0.1.4 my-thesis
+typst init @preview/classic-thesis-uct:0.1.5 my-thesis
 cd my-thesis
 typst watch main.typ thesis.pdf
 ```
@@ -27,7 +27,7 @@ The generated project gives you a runnable `main.typ`, seven chapter stubs, an e
 If you would rather drive the layout yourself, import the module from your own document:
 
 ```typst
-#import "@preview/classic-thesis-uct:0.1.4": *
+#import "@preview/classic-thesis-uct:0.1.5": *
 
 #let meta = (
   title: "On the Categorical Imperatives of Penguins",
@@ -142,9 +142,14 @@ The template uses these families, which Typst will look up in the system or bund
 - **EB Garamond 12** — body
 - **EB Garamond SC 12** — small caps and headings
 - **EB Garamond** — bold (strong) text only: the body face ships no bold, so `*strong*` falls back to `EBGaramond-Bold.ttf` (family `EB Garamond`). Point the compiler at that font, or strong text silently renders in the regular weight: `--font-path fonts` on the CLI, `TYPST_FONT_PATHS=fonts`, `tinymist.fontPaths` in Tinymist (this repo's `.vscode/settings.json` already does that), or install the bold face system-wide.
-- **New Computer Modern** — monospace
+- **Michelangelus** — level 3 and 4 headings
+- **Geist Mono** — monospace
 
-If compilation fails with “font not found”, install the families above. EB Garamond is freely available from [Georg Duffner](https://github.com/octaviopardo/EBGaramond12).
+If compilation fails with “font not found”, install the families above:
+
+- [EB Garamond](https://fonts.google.com/specimen/EB+Garamond) (Google Fonts; also available from [Georg Duffner](https://github.com/octaviopardo/EBGaramond12))
+- [Geist Mono](https://fonts.google.com/specimen/Geist+Mono) (Google Fonts)
+- [Michelangelus](https://www.microsoft.com/en-us/download/details.aspx?id=108856) (Microsoft Download Center)
 
 ## Compatibility
 
@@ -164,6 +169,6 @@ The package is distributed under a split SPDX expression — `GPL-2.0-or-later A
 | `lib.typ`, `classicthesis-uct.typ`, `assets/`, `thumbnail.png`, `README.md` | GNU General Public License v2 or later | `LICENSE` |
 | Everything under `template/` (the project skeleton copied by `typst init`) | MIT No Attribution (MIT-0) | `template/LICENSE` |
 
-**In plain English:** if you modify or redistribute the layout module (the code that defines the classic-thesis visual style), GPL v2 applies and you must share your changes under the same licence. If you run `typst init @preview/classic-thesis-uct:0.1.4` to start a thesis and then write your own document on top of the scaffold, the resulting work is yours — MIT-0 imposes no attribution or licence-distribution requirement.
+**In plain English:** if you modify or redistribute the layout module (the code that defines the classic-thesis visual style), GPL v2 applies and you must share your changes under the same licence. If you run `typst init @preview/classic-thesis-uct:0.1.5` to start a thesis and then write your own document on top of the scaffold, the resulting work is yours — MIT-0 imposes no attribution or licence-distribution requirement.
 
 If you ship this package bundled inside a larger distribution, you must include both licence files.
