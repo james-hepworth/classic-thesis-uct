@@ -9,8 +9,6 @@
 #let body-font = selected-font
 #let display-font = selected-font
 #let heading-font = selected-font
-// Sub-heading faces (levels 3–4, the italic small-cap rules in the template).
-#let heading-sub-font = "Michelangelus"
 #let smallcaps-font = selected-font
 #let mono-font = "Geist Mono"
 // Bold fallback. `EB Garamond 12` (the body face) only ships Regular and
@@ -215,7 +213,7 @@
   ]
   show heading.where(level: 3): it => [
     #block(above: 1.65em, below: 1.45em)[
-      #text(font: heading-sub-font, style: "italic", size: 8.5pt, tracking: 0.01em)[
+      #text(font: heading-font, style: "italic", size: 9pt, tracking: 0.01em)[
         #if it.numbering != none [
           #counter(heading).display(it.numbering)
           #h(0.85em)
@@ -228,7 +226,7 @@
   show heading.where(level: 4): it => [
     #block(above: 1.65em, below: 1.45em)[
       #pad(left: 1.6em)[
-        #text(font: heading-sub-font, style: "italic", size: 8.5pt, tracking: 0.01em)[
+        #text(font: heading-font, style: "italic", size: 9pt, tracking: 0.01em)[
           #if it.numbering != none [
             #counter(heading).display(it.numbering)
             #h(0.85em)

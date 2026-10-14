@@ -142,14 +142,12 @@ The template uses these families, which Typst will look up in the system or bund
 - **EB Garamond 12** — body
 - **EB Garamond SC 12** — small caps and headings
 - **EB Garamond** — bold (strong) text only: the body face ships no bold, so `*strong*` falls back to `EBGaramond-Bold.ttf` (family `EB Garamond`). Point the compiler at that font, or strong text silently renders in the regular weight: `--font-path fonts` on the CLI, `TYPST_FONT_PATHS=fonts`, `tinymist.fontPaths` in Tinymist (this repo's `.vscode/settings.json` already does that), or install the bold face system-wide.
-- **Michelangelus** — level 3 and 4 headings
 - **Geist Mono** — monospace
 
 If compilation fails with “font not found”, install the families above:
 
 - [EB Garamond](https://fonts.google.com/specimen/EB+Garamond) (Google Fonts; also available from [Georg Duffner](https://github.com/octaviopardo/EBGaramond12))
 - [Geist Mono](https://fonts.google.com/specimen/Geist+Mono) (Google Fonts)
-- [Michelangelus](https://www.microsoft.com/en-us/download/details.aspx?id=108856) (Microsoft Download Center)
 
 ## Compatibility
 
