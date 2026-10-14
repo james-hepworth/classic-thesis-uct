@@ -53,6 +53,10 @@
 #title-page(meta)
 #title-back(meta)
 
+#authorship-page[
+This page should contain a declaration of authorship, confirming that the work presented in this thesis is your own and that all sources have been properly acknowledged. You may also include any relevant statements regarding the originality of the work, contributions from collaborators, or any other necessary declarations as required by your institution.
+]
+
 #abstract-page[
 Replace this abstract with a concise overview of the proposal. A useful structure is:
 

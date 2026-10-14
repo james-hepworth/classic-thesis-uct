@@ -415,6 +415,12 @@
   set page(footer: folio-footer("1"))
 }
 
+#let authorship-page(body) = [
+  #front-heading("Declaration of Authorship")
+  #major-column-block[#body]
+  #pagebreak()
+]
+
 #let abstract-page(body) = [
   #front-heading("Abstract")
   #major-column-block[#body]
@@ -527,8 +533,10 @@
   ]
 ]
 
-#let chapter(title, number, body) = [
-  #hide(heading(level: 1)[#title])
+// Pass `label: <ch-name>` to make the chapter referenceable as `@ch-name`,
+// which renders as "Chapter 4" (or the given supplement, e.g. "Appendix A").
+#let chapter(title, number, body, label: none, supplement: [Chapter]) = [
+  #hide[#heading(level: 1, supplement: supplement)[#title]#label]
   #counter(math.equation).update(0)
   #counter(figure.where(kind: image)).update(0)
   #counter(figure.where(kind: table)).update(0)
